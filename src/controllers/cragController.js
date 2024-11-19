@@ -46,10 +46,10 @@ const getCragWithBoulders = async (req, res) => {
 }
 
 const createCrag = async (req, res) => {
-  const { name, description } = req.body
+  const { name, description, latitude, longitude } = req.body
 
   try {
-    const newCrag = new Crag({ name, description })
+    const newCrag = new Crag({ name, description, latitude, longitude })
     const crag = await newCrag.save()
     res.status(201).json(crag)
   } catch (error) {
@@ -58,4 +58,34 @@ const createCrag = async (req, res) => {
   }
 }
 
-module.exports = { createCrag, getCragWithBoulders, getAllCrags }
+const updateCrag = async (req, res) => {
+  const { crag_id } = req.params
+  const { name, description, latitude, longitude } = req.body
+
+  try {
+    const updatedCrag = await Crag.findByIdAndUpdate(crag_id, { name, description, latitude, longitude })
+    if (!updatedCrag) {
+      return res.status(404).json({ message: 'Crag not found' })
+    }
+    res.status(200).json(updatedCrag)
+  } catch {
+    console.error(error.message)
+    res.status(500).send('Server error')
+  }
+}
+
+const deleteCrag = async (req, res) => {
+  const { crag_id } = req.params
+
+  try {
+    const deletedCrag = await Crag.findByIdAndDelete(crag_id)
+    if (!deletedCrag) {
+      return res.status(404).json({ message: 'Crag not found' })
+    }
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server error')
+  }
+}
+
+module.exports = { createCrag, getCragWithBoulders, getAllCrags, updateCrag, deleteCrag }
