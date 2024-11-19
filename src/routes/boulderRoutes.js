@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { createBoulder } = require('../controllers/boulderController')
+const { createBoulder, getBoulderWithSections } = require('../controllers/boulderController')
+
+router.get('/:boulder_id', getBoulderWithSections)
 
 router.post('/', createBoulder)
 

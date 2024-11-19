@@ -8,7 +8,6 @@ const getCragWithBoulders = async (req, res) => {
 
   try {
     const crag = await Crag.findById(crag_id)
-
     if (!crag) {
       return res.status(404).json({ message: 'Crag not found' })
     }
@@ -16,6 +15,7 @@ const getCragWithBoulders = async (req, res) => {
     const boulders = await Boulder.find({ crag_id: crag_id })
     const bouldersWithSections = await Promise.all(
       boulders.map(async (boulder) => {
+        
         const sections = await Section.find({ boulder_id: boulder._id })
         const sectionsWithProblems = await Promise.all(
           sections.map(async (section) => {
