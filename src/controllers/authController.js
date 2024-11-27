@@ -22,7 +22,14 @@ const login = async (req, res) => {
       { expiresIn: '1h' }                 
     );
 
-    res.status(200).json({ token });
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAxe: 3600000,
+    })
+
+    res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
