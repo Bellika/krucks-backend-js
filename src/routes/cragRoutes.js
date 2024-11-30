@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { createCrag, getCragWithBoulders, getAllCrags, updateCrag, deleteCrag } = require('../controllers/cragController')
+const { getCrag ,createCrag, getCragWithBoulders, getAllCrags, updateCrag, deleteCrag } = require('../controllers/cragController')
 
-router.get('/:crag_id', getCragWithBoulders)
+router.get('/list/:crag_id', getCragWithBoulders)
+
+router.get('/:crag_id', getCrag)
 
 router.get('/', getAllCrags)
 

@@ -13,6 +13,18 @@ const getAllCrags = async (req, res) => {
   }
 }
 
+const getCrag = async (req, res) => {
+  const { crag_id } = req.params
+
+  try {
+    const crag = await Crag.findById(crag_id)
+    res.status(200).json(crag)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server error')
+  }
+}
+
 const getCragWithBoulders = async (req, res) => {
   const { crag_id } = req.params
 
@@ -88,4 +100,4 @@ const deleteCrag = async (req, res) => {
   }
 }
 
-module.exports = { createCrag, getCragWithBoulders, getAllCrags, updateCrag, deleteCrag }
+module.exports = { createCrag, getCragWithBoulders, getAllCrags, updateCrag, deleteCrag, getCrag }
