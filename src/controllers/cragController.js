@@ -58,10 +58,21 @@ const getCragWithBoulders = async (req, res) => {
 }
 
 const createCrag = async (req, res) => {
-  const { name, description, latitude, longitude } = req.body
+  const { name, description, lng, lat } = req.body
+
+  if (!name || !description || lng == null || lat == null) {
+    return res.status(400).json({ message: 'All fields are required'})
+  }
 
   try {
-    const newCrag = new Crag({ name, description, latitude, longitude })
+    const newCrag = new Crag({ 
+      name, 
+      description, 
+      location: {
+        type: 'Point',
+        coordinates: [lng, lat]
+      } })
+
     const crag = await newCrag.save()
     res.status(201).json(crag)
   } catch (error) {
