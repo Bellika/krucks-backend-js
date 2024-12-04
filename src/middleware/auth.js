@@ -8,7 +8,7 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decode = jwt.verify(token, 'SECRET_TOKEN_HERE')
+    const decode = jwt.verify(token, process.env.JWT_SECRET)
     req.user = decode
     next()
   } catch (error) {
