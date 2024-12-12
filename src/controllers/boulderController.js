@@ -2,6 +2,18 @@ const Boulder = require('../models/Boulder')
 const Section = require('../models/Section')
 const Problem = require('../models/Problem')
 
+const getBouldersByCragId = async (req, res) => {
+  const { crag_id } = req.params
+
+  try {
+    const boulders = await Boulder.find({ crag_id: crag_id})
+    res.status(200).json(boulders)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server error')
+  }
+}
+
 const getBoulderWithSections = async (req, res) => {
   const { boulder_id } = req.params
 
@@ -27,10 +39,21 @@ const getBoulderWithSections = async (req, res) => {
 }
 
 const createBoulder = async (req, res) => {
-  const { crag_id, name, description } = req.body
+  const { crag_id, name, description, lng, lat } = req.body
+
+  if (!name || !description || lng == null || lat == null) {
+    return res.status(400).json({ message: 'All fields are required'})
+  }
 
   try {
-    const newBoulder = new Boulder({ crag_id, name, description })
+    const newBoulder = new Boulder({ 
+      crag_id, 
+      name, 
+      description,
+      location: {
+        type: 'Point',
+        coordinates: [lng, lat]
+      } })
     const boulder = await newBoulder.save()
     res.status(201).json(boulder)
   } catch (error) {
@@ -39,4 +62,4 @@ const createBoulder = async (req, res) => {
   }
 }
 
-module.exports = { createBoulder, getBoulderWithSections }
+module.exports = { createBoulder, getBoulderWithSections, getBouldersByCragId }
