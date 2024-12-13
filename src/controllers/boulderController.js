@@ -2,6 +2,18 @@ const Boulder = require('../models/Boulder')
 const Section = require('../models/Section')
 const Problem = require('../models/Problem')
 
+const getBoulder = async (req, res) => {
+  const { boulder_id } = req.params
+
+  try {
+    const boulder = await Boulder.findById(boulder_id)
+    res.status(200).json(boulder)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server error')
+  }
+}
+
 const getBouldersByCragId = async (req, res) => {
   const { crag_id } = req.params
 
@@ -62,4 +74,4 @@ const createBoulder = async (req, res) => {
   }
 }
 
-module.exports = { createBoulder, getBoulderWithSections, getBouldersByCragId }
+module.exports = { createBoulder, getBoulderWithSections, getBouldersByCragId, getBoulder }
